@@ -9,11 +9,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 wss.on('connection', (ws) => {
     console.log('Cliente conectado');
     ws.on('message', (message) => {
-        console.log('Mensaje recibido:', message.toString());
+        const data = JSON.parse(message);
+        console.log(data);
     // Reenviar el mensaje a todos los clientes conectados
     wss.clients.forEach((client) => {
         if (client.readyState === WebSocket.OPEN) {
-            client.send(message.toString());
+            client.send(JSON.stringify(data));
         }
         });
     });

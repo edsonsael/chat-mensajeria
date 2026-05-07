@@ -6,7 +6,13 @@
     socket.onmessage = (event) => {
         const messages = document.getElementById('messages');
         const item = document.createElement('li');
-        item.textContent = event.data;
+        const data = JSON.parse(event.data);
+
+        item.textContent =
+            data.username +
+            ': ' +
+            data.message +
+            ' [' + data.time + ']';
         messages.appendChild(item);
     };
     socket.onclose = () => {
@@ -18,16 +24,7 @@
 
 
     const message = document.getElementById('message').value.trim();
-    if (username === '' && message === '') {
-   
-             alert('Debe ingresar nombre y mensaje');
-       
-        return;
-    }
-    if(username === ''){
-        alert('Debe ingresar nombre y mensaje');
-        return
-    }
+    
     if(message === ''){
         alert('No se puede enviar mensajes vacios');
         return
@@ -38,6 +35,18 @@
 
 
     const finalMessage =  username + ': ' + message + '  [' + time + '] ';
-        socket.send(finalMessage);
+       
+    let finalUsername = username;
+
+    if(finalUsername === ''){
+        finalUsername = 'Usuario_' + Math.floor(Math.random() * 1000);
+    }
+
+    socket.send(JSON.stringify({
+        type: 'message',
+        username: finalUsername,
+        message: message,
+        time: time
+    }));
         document.getElementById('message').value = '';
-        }
+    }
