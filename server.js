@@ -9,8 +9,22 @@ const server = http.createServer(app);
 
 const wss = new WebSocket.Server({ server });
 const messages = [];   //almacenar mensajes
+const connectedUsers = []; //lista de usuarios conectados
 
 app.use(express.static(path.join(__dirname, 'public')));
+
+function broadcastUsers(){
+    const usersMessage = {
+        type: 'users',
+        users: connectedUsers
+    };
+
+    wss.clients.forEach((client) => {
+        if(client.readyState === WebSocket.OPEN){
+            client.send(JSON.stringify(usersMessage));
+        }
+    });
+}
 
 wss.on('connection', (ws) => {
 
@@ -28,10 +42,14 @@ wss.on('connection', (ws) => {
         console.log(data);
 
         if(data.type === 'join'){
+            connectedUsers.push(ws.username);
+
             const joinMessage = {
                 type: 'system',
                 message: ws.username + ' se unió al chat'
             };
+
+            broadcastUsers();
 
             wss.clients.forEach((client) => {
                 if(client.readyState === WebSocket.OPEN){
@@ -64,6 +82,13 @@ wss.on('connection', (ws) => {
             type: 'system',
             message: ws.username + ' salió del chat'
         };
+
+        const index = connectedUsers.indexOf(ws.username);
+        if(index !== -1){
+            connectedUsers.splice(index, 1);
+        }
+
+        broadcastUsers();
 
         wss.clients.forEach((client) => {
 

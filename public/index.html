@@ -6,26 +6,50 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-    <script src="script.js"></script>
 
 </head>
 <body>
-    <h1>WebSocket Chat</h1>
-    <div class = 'form'>
-    <label>Nombre:</label>
-    <input id="username" type="text" placeholder="Ingrese el nombre" />
 
-    <br><br>
-    
-    <label>Mensaje:</label>
-    <input id="message" type="text" placeholder="Escribe un mensaje" onkeypress="handleKeyPress(event)"/>
-    
-    <button onclick="sendMessage()">Enviar</button>
+<div class="chat-container">
+
+    <h1>WebSocket Chat</h1>
+
+    <div class="main-content">
+
+        <div class="sidebar">
+
+            <h3>Usuarios</h3>
+
+            <div id="users-list"></div>
+
+        </div>
+
+        <div class="chat-area">
+
+            <ul id="messages"></ul>
+
+            <div class="input-area">
+
+                <input
+                    id="message"
+                    type="text"
+                    placeholder="Escribe un mensaje"
+                    onkeypress="handleKeyPress(event)"
+                />
+
+                <button onclick="sendMessage()">
+                    Enviar
+                </button>
+
+            </div>
+
+        </div>
 
     </div>
-    
-    <h2>Mensajes</h2>
-    <ul id="messages"></ul>
+
+</div>
+
+    <script src="script.js"></script>
 
 </body>
 </html>

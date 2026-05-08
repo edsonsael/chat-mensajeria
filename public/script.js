@@ -21,8 +21,17 @@ const socket = new WebSocket('ws://localhost:3000');
         const item = document.createElement('li');
         const data = JSON.parse(event.data);
 
+        if(data.type === 'users'){
+            const usersList = document.getElementById('users-list');
+            usersList.innerHTML =
+                '<strong>Usuarios conectados:</strong><br>' +
+                data.users.join('<br>');
+            return;
+        }
+
         if(data.type === 'system'){
            item.textContent = data.message;
+           item.classList.add('system-message');
         }else{
             item.textContent =
                 data.username +
@@ -32,6 +41,7 @@ const socket = new WebSocket('ws://localhost:3000');
         }
 
         messages.appendChild(item);
+        messages.scrollTop = messages.scrollHeight;
     };
     socket.onclose = () => {
         console.log('Conexión cerrada');
