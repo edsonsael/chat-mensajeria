@@ -21,6 +21,7 @@ const socket = new WebSocket('ws://localhost:3000');
         const item = document.createElement('li');
         const data = JSON.parse(event.data);
 
+
         if(data.type === 'users'){
             const usersList = document.getElementById('users-list');
             usersList.innerHTML =
@@ -33,11 +34,26 @@ const socket = new WebSocket('ws://localhost:3000');
            item.textContent = data.message;
            item.classList.add('system-message');
         }else{
-            item.textContent =
-                data.username +
-                ': ' +
-                data.message +
-                ' [' + data.time + ']';
+            if(data.username === username){
+                item.classList.add('my-message');
+            }else{
+                item.classList.add('other-message');
+            }
+
+           item.innerHTML = `
+                <div class="message-username">
+                    ${data.username}
+                </div>
+
+                <div class="message-text">
+                    ${data.message}
+                </div>
+
+                <div class="message-time">
+                    ${data.time}
+                </div>
+
+            `;
         }
 
         messages.appendChild(item);
