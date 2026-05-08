@@ -2,16 +2,47 @@ const express = require('express');
 const http = require('http');
 const WebSocket = require('ws');
 const path = require('path');
+const sqlite3 = require('sqlite3').verbose(); //importar sqlite
 
 const app = express();
 
 const server = http.createServer(app);
 
 const wss = new WebSocket.Server({ server });
+const db = new sqlite3.Database('./database.db'); //creamos la conexion a la base de datos
 const messages = [];   //almacenar mensajes
 const connectedUsers = []; //lista de usuarios conectados
 
+db.serialize(() => {
+    db.run(`
+        CREATE TABLE IF NOT EXISTS messages (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT,
+            message TEXT,
+            time TEXT
+        )
+    `);
+
+});
+
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.get('/messages', (req, res) => {
+    db.all(
+        'SELECT username, message, time FROM messages',
+        [],
+        (err, rows) => {
+            if(err){
+                res.status(500).json({
+                    error: err.message
+                });
+                return;
+            }
+            res.json(rows);
+        }
+    );
+
+});
 
 function broadcastUsers(){
     const usersMessage = {
@@ -31,9 +62,26 @@ wss.on('connection', (ws) => {
     console.log('Cliente conectado');
 
     //cuando alguien entre se mostrara todos los mensajes anteriores
-    messages.forEach((msg) => {
-        ws.send(JSON.stringify(msg));
-    });
+    db.all(
+        'SELECT username, message, time FROM messages',
+        [],
+        (err, rows) => {
+            if(err){
+                console.log(err.message);
+                return;
+            }
+
+            rows.forEach((row) => {
+                ws.send(JSON.stringify({
+                    type: 'message',
+                    username: row.username,
+                    message: row.message,
+                    time: row.time
+                }));
+            });
+
+        }
+    );
 
     ws.on('message', (message) => {
 
@@ -60,9 +108,12 @@ wss.on('connection', (ws) => {
             return;
         }
 
-        //guarda todos los mensajes
+        //guarda todos los mensajes en la base de datos
         if(data.type === 'message'){
-            messages.push(data);
+              db.run(
+                    'INSERT INTO messages(username, message, time) VALUES (?, ?, ?)',
+                    [data.username, data.message, data.time]
+              );
         }
 
         //reenvia los mensajes
