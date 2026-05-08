@@ -1,11 +1,8 @@
 let username = localStorage.getItem('username'); //almacena el usuario para cada sesion
 
 if(!username){
-
     username = 'Usuario_' + Math.floor(Math.random() * 1000);
-
     localStorage.setItem('username', username);
-
 }
 
 
@@ -41,6 +38,7 @@ const socket = new WebSocket('ws://localhost:3000');
     };
     
     function sendMessage() {
+    
     const message = document.getElementById('message').value.trim();
     
     if(message === ''){
@@ -58,4 +56,10 @@ const socket = new WebSocket('ws://localhost:3000');
         time: time
     }));
         document.getElementById('message').value = '';
+    }
+
+    function handleKeyPress(event){
+        if(event.key === 'Enter'){
+            sendMessage();
+        }
     }
