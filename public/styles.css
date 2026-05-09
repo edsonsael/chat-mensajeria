@@ -15,52 +15,62 @@ body{
 
 .sidebar{
   width: 200px;
-  background-color: white;
+  background-color:  #312E81;
+  color: white;
   border: 1px solid #ccc;
   border-radius: 10px;
   padding: 10px;
+
 }
 
 .chat-area{
   flex: 1;
+  
   display: flex;
   flex-direction: column;
   min-height: 0;
+  overflow: hidden;
 }
 
 h1{
-  text-align: center;
+  text-align: left;
+  color: #312E81;
 }
 
 h3{
+  font-size: 23px;
+  margin: 15px auto;
   text-align: center;
 }
+
 
 .main-content{
   flex: 1;
   display: flex;
-  gap: 10px;
+  gap: 5px;
   min-height: 0;
+  overflow: hidden;
 }
 
 #messages{
-
+ 
   flex: 1;
   overflow-y: auto;
   min-height: 0;
   display: flex;
   flex-direction: column;
-  background-color: white;
-  border-radius: 10px;
+  background-color: #F4F7FB;
+  border-radius: 0px;
   padding: 10px;
   margin: 0;
   list-style: none;
   border: 1px solid #ccc;
+  overflow-x: hidden;
 }
 
 #messages li{
-  margin: 5px 0;
-  padding: 10px;
+  margin: 2px 0;
+  padding: 2px;
   border-radius: 8px;
   word-break: break-word;
 }
@@ -73,16 +83,19 @@ h3{
 
 .input-area input{
   flex: 1;
-
   padding: 10px;
-
-  border-radius: 5px;
+  border-radius: 20px;
+  padding-left: 15px;
   border: 1px solid #ccc;
+}
+
+.message-username{
+  white-space: nowrap;
 }
 
 .my-message{
   align-self: flex-end;
-  background-color: #2664c0;
+ margin-right: 0px;
   color: white;
   max-width: 70%;
   padding: 10px;
@@ -90,9 +103,29 @@ h3{
 
 }
 
+.my-message .message-bubble{
+
+  background-color: #6366F1;
+
+  color: white;
+
+}
+
+.my-message .message-row{
+
+  justify-content: flex-end;
+
+}
+
+.other-message .message-bubble{
+
+  background-color: #E5E7EB;
+
+}
+
 .other-message{
   align-self: flex-start;
-  background-color: #b7c1ca;
+ 
   max-width: 70%;
   padding: 10px;
   border-radius: 8px;
@@ -101,7 +134,7 @@ h3{
 
 .message-username{
   font-weight: bold;
-  font-size: 14px;
+  font-size: 13px;
   margin-bottom: 5px;
 }
 
@@ -116,30 +149,138 @@ h3{
   text-align: right;
 }
 
+.avatar{
 
-button{
-  padding: 10px 15px;
+  width: 40px;
 
-  border: none;
-  border-radius: 5px;
+  height: 40px;
 
-  background-color: #15B31D;
+  border-radius: 50%;
+
+  background-color: #8B5CF6;
+
   color: white;
 
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  font-weight: bold;
+
+  margin-right: 10px;
+
+  flex-shrink: 0;
+
+}
+
+.message-bubble{
+
+  padding: 10px;
+
+  border-radius: 10px;
+  min-width: 120px;
+  max-width: 70%;
+
+}
+
+.avatar-space{
+
+  width: 50px;
+
+  flex-shrink: 0;
+
+}
+
+.message-row{
+  display: flex;
+  align-items: flex-start;
+  gap: 0px;
+}
+
+button{
+  width: 50px;
+  height: 50px;
+
+  border: none;
+  border-radius: 50%;
+  background-color: #8B5CF6;
+  color: white;
+  font-size: 23px;
   cursor: pointer;
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
 }
 
 button:hover{
-  background-color: #108616;
+  background-color: #7C3AED;
 }
 
 .system-message{
-  background-color: transparent !important;
-  text-align: center;
+
   align-self: center;
-  color: gray;
-  font-style: italic;
-  font-size: 14px;
+
+  background: transparent !important;
+
+  color: #777;
+
+  font-size: 13px;
+
   border: none !important;
+
+  width: 100%;
+
+  text-align: center;
+
+  margin: 10px 0;
+
 }
 
+.system-text{
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+}
+
+.system-text::before,
+
+.system-text::after{
+
+  content: '';
+
+  flex: 1;
+
+  height: 1px;
+
+  background-color: #ccc;
+
+}
+
+.user-item{
+  padding: 8px;
+  border-radius: 5px;
+  margin-bottom: 5px;
+  background-color: #8B5CF6;
+}
+
+
+
+::-webkit-scrollbar{
+
+  width: 8px;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+  background-color: rgba(61, 59, 190, 0.2);
+
+}
